@@ -15,6 +15,7 @@ import java.util.UUID;
 public class MenuItem {
     @Id
     @GeneratedValue
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(nullable = false)
