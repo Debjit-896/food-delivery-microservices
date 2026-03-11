@@ -7,10 +7,7 @@ import com.debjitpal.order_service.entity.Order;
 import com.debjitpal.order_service.entity.OrderItem;
 import com.debjitpal.order_service.entity.OrderStatus;
 import com.debjitpal.order_service.entity.OrderStatusHistory;
-import com.debjitpal.order_service.exception.MenuItemNotFoundException;
-import com.debjitpal.order_service.exception.OrderItemNotFoundException;
 import com.debjitpal.order_service.exception.ResourceNotFoundException;
-import com.debjitpal.order_service.exception.RestaurantNotFoundException;
 import com.debjitpal.order_service.external.service.MenuClient;
 import com.debjitpal.order_service.external.service.RestaurantClient;
 import com.debjitpal.order_service.repository.OrderRepository;
@@ -43,7 +40,7 @@ public class OrderServiceImpl implements OrderService {
                 restaurantClient.getRestaurantById(request.getRestaurantId());
 
         if (restaurantResponse.getData() == null) {
-            throw new RestaurantNotFoundException("Restaurant not found!");
+            throw new ResourceNotFoundException("Restaurant not found!");
         }
 
         Order order = new Order();
@@ -67,11 +64,11 @@ public class OrderServiceImpl implements OrderService {
             MenuItemResponse menuItem = menuResponse.getData();
 
             if (menuItem == null) {
-                throw new MenuItemNotFoundException("Menu item not found with id: " + itemRequest.getMenuItemId());
+                throw new ResourceNotFoundException("Menu item not found with id: " + itemRequest.getMenuItemId());
             }
 
             if (!menuItem.getIsAvailable()) {
-                throw new MenuItemNotFoundException("Menu item is currently unavailable.");
+                throw new ResourceNotFoundException("Menu item is currently unavailable.");
             }
 
             OrderItem item = new OrderItem();
@@ -99,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OnlyOrderResponse updateOrderStatus(UUID orderId, String status) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderItemNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Oder Not Found With ID: " + orderId)
                 );
 
@@ -125,7 +122,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void cancelOrder(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderItemNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Oder Not Found With ID: " + orderId)
                 );
 
@@ -145,7 +142,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OnlyOrderResponse getOrderById(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderItemNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Order Not Found With ID: " + orderId)
                 );
 
@@ -155,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderStatusHistoryResponse> orderHistory(UUID orderId) {
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new OrderItemNotFoundException(
+                .orElseThrow(() -> new ResourceNotFoundException(
                         "Order not found with id: " + orderId)
                 );
 

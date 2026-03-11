@@ -2,7 +2,7 @@ package com.debjitpal.order_service.exceptionHandlers;
 
 import com.debjitpal.order_service.dto.response.ErrorResponse;
 import com.debjitpal.order_service.exception.InvalidStatusException;
-import com.debjitpal.order_service.exception.OrderItemNotFoundException;
+import com.debjitpal.order_service.exception.ResourceNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 @RestControllerAdvice
 public class GlobalExceptionHandlers {
 
-    @ExceptionHandler(OrderItemNotFoundException.class)
-    public ResponseEntity<?> handleOrderItemNotFoundException(
-            OrderItemNotFoundException ex, WebRequest request) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<?> handleResourceNotFoundException(
+            ResourceNotFoundException ex, WebRequest request) {
 
         ErrorResponse errorResponse = new ErrorResponse(
                 LocalDateTime.now(),
